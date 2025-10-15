@@ -1,0 +1,1 @@
+Day 1: Set up Python, Git, VSCode. Started to relearn Git and transfered all my repos back to github. Now that I am able to manage my files, this will be a lot easier. This is a pretty good stop point for day 1. 

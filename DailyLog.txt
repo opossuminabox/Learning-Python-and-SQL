@@ -1,1 +1,2 @@
 Day 1: Set up Python, Git, VSCode. Started to relearn Git and transfered all my repos back to github. Now that I am able to manage my files, this will be a lot easier. This is a pretty good stop point for day 1. 
+Day 2: Fairly sleep deprived, not as productive of a day. Set up arch machine with python and code to have matching environments. Note still need to set up keys on the laptop. Did some reading on Python, next day will be making some scripts!

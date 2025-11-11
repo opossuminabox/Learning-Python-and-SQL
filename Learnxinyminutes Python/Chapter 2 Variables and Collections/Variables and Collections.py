@@ -126,3 +126,102 @@ d, e, f = 4, 5, 6       # Tuple 4, 5, 6 is unpacked onto d, e, f (d = 4, e = 5, 
 # Variable Swapping
 d, e = e, d             # d = 5 and e = 4
 
+
+
+
+
+# Dictionaries store mappings from keys to values. Dicts are like editable structs. 
+empty_dict = {}
+filled_dict = {"one": 1, "two": 2, "three":3}
+
+# Keys for dicts need to be immutable types. This is to be sure keys can be hashed for quick lookups. Keys can be ints, floats, strings, and tuples. 
+invalid_dict = {[1,2,3]: "123"}  # Yield a TypeError: unhashable type: 'list'
+valid_dict = {(1,2,3):[1,2,3]}   # Values can be of any type, however.
+
+# Look up values with []
+filled_dict["one"]  # 1
+
+
+# Use keys() to show all keys. We are wrapping it in list() here. Note in Python 3.7+, keys will be in the order they were put into the dict. 
+list(filled_dict.keys())    # ["one", "two", "three"] in Python 3.7+
+
+# Same idea for values, use values()
+list(filled_dict.values())  # [1, 2, 3] in python 3.7+
+
+# Existance of keys can be checked with in
+"one" in filled_dict    # True
+1 in filled_dict        # False because it's a value, not a key
+
+# Looking up a key that doesn't exist brings up a Key Error
+filled_dict["four"]     # Key Error, doesn't exist
+
+# Use get() to go around the Key Error
+filled_dict.get("one")  # 1
+filled_dict.get("four") # None
+
+# get() supports a default argument if the key pair is missing
+filled_dict.get("one", 4)  # 1 because they key pair already exists, Errors out
+filled_dict.get("four", 4) # 4 because it is a new key pair
+
+# setdefault() inserts into dictionary only if the given key is new
+filled_dict.setdefault("five", 5)   # Sets "five" to 5
+filled_dict.setdefault("five", 6)   # "five" stays set to 5 because it already exists
+
+# Adding to a dictionary
+filled_dict.update({"six": 6})
+filled_dict["seven"] = 7
+
+# Remove key from dict
+del filled_dict["one"]  # Removes "one" from filled_dict
+
+# From Python 3.5 you can also use the additional unpacking options
+{"a": 1, **{"b": 2}}  # => {'a': 1, 'b': 2}
+{"a": 1, **{"a": 2}}  # => {'a': 2}
+
+
+
+# Sets are like dicts without values. Good to use for "Is this thing in here?"
+# Sets do not store duplicate values. You can use it to check for duplicates for example. 
+#seen = set()
+#for mrn in list_of_mrns:
+#    if mrn in seen:
+#        print("duplicate")
+#    seen.add(mrn)
+
+# This checks for duplicate MRN's
+
+empty_set = set()
+# Initialize a set with values
+some_set = {1,1,1,2,3,3,4,4}    # some_set is {1, 2, 3, 4}
+
+# Like keys of a dictionary, elements of a set need to be immutable (const)
+invalid_set = {[1], 1}      # Does not work. Raises a TypeError: Unhashable type: "List"
+valid_set = {(1,),1}
+
+# Add one more item to the set
+filled_set = some_set
+filled_set.add(5)           # filled_set is now {1, 2, 3, 4, 5}
+# Remember sets cannot have duplicate values
+filled_set.add(5)           # filled_set remains {1, 2, 3, 4, 5}
+
+# & (and), | (or), ^ (xor), - (difference) work with sets
+other_set = {3, 4, 5, 6}
+# Note: filled_set is {1, 2, 3, 4, 5}
+# Note: other_set is  {3, 4, 5, 6}
+filled_set & other_set      # Set Intersection (and) with &, {3, 4, 5}
+filled_set | other_set      # Set Union (or) with |, {1, 2, 3, 4, 5, 6}
+filled_set - other_set      # Set difference with - (minus), {1, 2}
+filled_set ^ other_set      # Set symmetric difference with ^ (xor), {1, 2, 6}
+
+# Check if set on the left is a superset of the set on the right
+{1, 2} >= {1, 2, 3}         # False
+# Check if set on the left is a subset of the set on the right
+{1, 2} <= {1, 2, 3}         # True
+
+# Check to see if something is in a set
+2 in filled_set             # True
+10 in filled_set            # False
+
+# Make a one layer deep copy instead of using = as a full layer copy
+filled_set = some_set.copy()    # filled_set is {1, 2, 3, 4, 5}
+filled_set is some_set          # False, they are not the same object

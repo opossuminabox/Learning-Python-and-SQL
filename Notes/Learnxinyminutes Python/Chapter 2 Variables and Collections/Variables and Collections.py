@@ -33,6 +33,16 @@ print(result)   # Prints nay
 # A list can have mixed ints, strings, floats, etc. 
 # Unlike something like an array, lists are actually OBJECTS. They have some built in functions shown below. 
 
+''' Advanced Notes:
+    The analogy of lists in Python to C is "an array of void* pointers"
+    a = [1, 2, 3]
+    comes out to 
+    a[0] -> int(1)
+    a[1] -> int(2)
+    a[2] -> int(3)
+'''
+
+
 # Lists can be initialized blank or prefilled. 
 blank_li = []
 prepop_li = [4,5,6]
@@ -100,6 +110,19 @@ len(blank_li)   # 6
 # Tuples are like lists but immutable. The tuples themselves are immutable, but the items they're pointing at can be. 
 # Ints, str, and tuples inside of a tuple is immutable, but lists, dicts, and sets can be edited as long as it's always refering to the same one. 
 
+''' Advanced Notes:
+    Tuples = fixed, immutable sequence of references. You cannot remove, append, or reorder them. 
+    You can however mutate the objects stored inside if that object is mutable
+
+    Tuples != frozen data
+    Tuples = frozen *container*
+    Contents inside may be mutable
+
+    Great for returning multiple values, fixed configs, keys for dicts (must be immutable to hash)
+'''
+
+
+
 tup = (1,2,3)
 tup[0]  # 1
 
@@ -127,7 +150,18 @@ d, e, f = 4, 5, 6       # Tuple 4, 5, 6 is unpacked onto d, e, f (d = 4, e = 5, 
 d, e = e, d             # d = 5 and e = 4
 
 
+''' Advanced Notes:
+    Dictionaries map Keys -> Values.
+    Key must be immutable (hashable)
+    Allowed: strings, ints, tuples
+    Not Allowed: lists, dicts
 
+    Lookup cost:
+        First lookup: ~O(1) average, internal probing
+        Repeated lookups: consistantly ~O(1)
+    
+    Dictionaries are very fast due to opening addressing and dynamic resizing
+'''
 
 
 # Dictionaries store mappings from keys to values. Dicts are like editable structs. 

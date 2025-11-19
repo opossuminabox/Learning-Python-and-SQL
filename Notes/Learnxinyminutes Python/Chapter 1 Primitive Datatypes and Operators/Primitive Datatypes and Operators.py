@@ -22,6 +22,19 @@
 1 + 3 * 2   # Use Parentheses to enforce precedence.
 (1 + 3) * 2 # The first line evals to 7, the second to 8
 
+
+''' Advanced Note: 
+    In C, the value is stored in the spaced allocated for a.
+    reassigning a different value to a changed the value. 
+    
+    In Python, it creates a name binding, or a pointer, for a to the value of 20.
+    reassigning a different value to a points it towards a different object with the permanent value of the new value.  
+
+    Everything in Python is an object.
+    == compares equality, is compares if they're the same object or not. 
+
+    All integers are big numbers. No overflow, no bit worries. Char, int, long, long long in C are all Ints in Python
+'''
 a = 20      # Int
 print(type(a))
 b = 6.24    # Float

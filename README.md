@@ -1,2 +1,3 @@
 # Learning-Python-and-SQL
 My goal is to learn python with a focus in automation as well as relearn SQL
+Note that many of these "days" I am refering to in the daily log is 30min - 1hr of time before work in the morning. Sometimes in the afternoons too depending on what the day looks like. While there may not be a ton of things learned or gone over, they are all gone over in a limited amount of time. 

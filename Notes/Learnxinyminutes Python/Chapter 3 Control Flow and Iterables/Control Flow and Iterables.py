@@ -107,3 +107,247 @@ while x < 4:
     x += 1  # Note that x++ does not work in Python because variables are pointers, not values.
 
 
+
+
+# This is one of the most un-c-like things i'm going to see in Python. 
+# Errors like everything else are objects
+# Throwing an error is like triggering a software interrupt
+# Python automatically jumps to the correct handler. 
+
+''' Advanced Notes:
+try:
+    code that might fail
+except ERROR HERE:
+    runs ONLY if something failed
+else:
+    runs ONLY if nothing failed
+finally:
+    ALWAYS runs no matter what
+
+    
+Can also remember as
+
+try:        # "Attempt this..."
+except:     # "...if something fails, go here."
+else:       # "...otherwise, if everything works, go here." (Optional)
+finally:    # "...and ALWAYS finish with this."
+
+Also note that 
+pass
+in python is like a placeholder. It can be used where python expects something.
+It can also be used as a "I don't really care about this error" insert like below
+'''
+
+try:
+    # Use raise to force an error to come up. It also has other uses. It forces something to happen RIGHT NOW.
+    raise IndexError("this is an index error")
+except IndexError as e:     # Stores the error as variable e, very helpful.
+    pass                    # Not a great habit to pass on errors unless you TRUELY know you can. Can mask bigger issues. Avoid unless completely necessary.
+except (TypeError, NameError):
+    print("There is a Type Error or a Name Error")
+else:
+    print("Good to go!")    # Runs only if no issues
+finally:
+    print("We can clean up resources here")     # Runs regardless
+
+
+
+''' Advanced Notes:
+with is not error handling, it's resource management. 
+with automatically does a cleanup routine for you. 
+
+f = open("file.txt")
+try:
+    data = f.read()
+finally:
+    f.close()
+    
+is the same as 
+
+with open("file.txt") as f:
+    data = f.read()
+    
+
+You can still combine the two
+
+try:
+    with open("x.txt") as f:
+        data = f.read()
+except FileNotFoundError:
+    print("Missing file")
+
+'''
+# Reading a file
+with open("myfile.txt") as f:
+    for line in f:
+        print(line)
+
+
+contents = {"aa":12, "bb":21}
+with open("myfile1.txt", "w") as file:
+    file.write(str(contents))   # Casts contents as a string
+
+# From another source
+# Write plain txt file
+with open("plain.txt", "w") as f:
+    f.write("Hello world!\nLine2")
+
+# Read plain text file
+with open("plain.txt") as f:
+    data = f.read()
+print(data)
+
+# JSON
+import json
+
+data = {"a":1, "b":2}
+with open("data.json", "w") as f:
+    json.dump(data, f)
+
+with open("data.json") as f:
+    data = json.load(f)
+
+
+# CSV
+# Good for....CSV's
+import csv
+
+rows = [
+    ["name", "dob", "address"],
+    ["Alice", "02-14-1990", "123 Main Street"],
+    ["Bob", "07-16-1943", "321 Side Road"], 
+]
+
+# Write to CSV
+with open("people.csv", "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerows(rows)
+
+# Read CSV lame way
+with open("people.csv") as f:
+    reader = csv.reader(f)
+    readrows1 = list(reader)
+print(readrows1)
+
+# Read CSV as a dict, super cool
+# Maps each row to a dict
+with open("people.csv") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        print(row["name"], row["dob"])
+
+# XML
+# XML requires a parser
+# This one is funky, will have to come back to it. It's not a bad code problem, it's just how XML works. Will need practice.
+# Legacy systems, as well as many hospital functions. Some HL7, Claims, etc. 
+
+import xml.etree.ElementTree as ET
+
+# Write
+root = ET.Element("people")
+ET.SubElement(root, "person", name="Alice")
+ET.SubElement(root, "person", name="Bob")
+
+tree = ET.ElementTree(root)
+tree.write("people.xml")
+
+# Read
+tree = ET.parse("people.xml")
+root = tree.getroot()
+
+for child in root:
+    print(child.tag, child.text)
+
+
+# Binary Files
+# Reading/Writing raw bytes
+# Useful for dealing with images, network packets, binary logs, embedded / low level formats
+
+with open("data.bin", "wb") as f:
+    f.write(b"\x01\x02\x03\x04")
+
+with open("data.bin", "rb") as f:
+    databinary = f.read()
+print(databinary)
+
+
+# Pickles (Python's built in object serializer)
+# Use with caution, only unpickle trusted data
+"""
+import pickle
+
+
+obj = {"a":1, "b":[1, 2, 3]}
+
+# Write
+with open("state.pkl", "wb") as f:
+    pickle.dump(obj, f)
+
+# Read
+with open("state.pkl") as f:
+    objread = pickle.load(f)
+"""
+
+# YAML
+# Used for configs, DevOps, Docker, cloud
+# Commenting most of this out, needs a module installed by pip
+# run in term, pip install pyyaml
+
+"""
+import yaml
+
+datayaml = {"project": "test", "version": 1}
+
+# Write
+with open("config.yaml", "w") as f:
+    yaml.dump(datayaml, f)
+
+# Read
+with open("config.yaml") as f:
+    datayamlread = yaml.safe_load(f)
+"""
+
+# SQLite
+# File based Database, super helpful for local automation
+
+import sqlite3
+
+conn = sqlite3.connect("people.db")
+cursor = conn.cursor()
+
+# Write
+cursor.execute("CREATE TABLE IF NOT EXISTS users (name TEXT, age INTEGER)")
+cursor.execute("INSERT INTO users VALUES (?, ?)", ("Alice", 30))
+conn.commit()
+conn.close()
+
+# Read
+conn = sqlite3.connect("people.db")
+cursor = conn.cursor()
+
+cursor.execute("SELECT * FROM users")
+rows = cursor.fetchall()
+
+print(rows)
+conn.close()
+
+
+# INI/ConfigParser
+
+import configparser
+
+
+# Write
+config = configparser.ConfigParser()
+config["User"] = {"name": "Alice", "role": "Admin"}
+
+with open("settings.ini", "w") as f:
+    config.write(f)
+
+# Read
+config = configparser.ConfigParser()
+config.read("settings.ini")
+
+print(config["User"]["name"])
+
+

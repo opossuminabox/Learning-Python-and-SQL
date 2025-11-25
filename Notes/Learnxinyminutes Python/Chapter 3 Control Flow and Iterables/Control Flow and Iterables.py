@@ -351,3 +351,132 @@ config.read("settings.ini")
 print(config["User"]["name"])
 
 
+''' Advanced Notes:
+
+Python iterable = "A thing you can loop over that knows how to give you one item at a time"
+
+In C terms
+Iterable is like a collection
+Iterator is like an opaque pointer + next() function
+
+Iterable:
+    a container you can iterate over
+    
+    Examples:
+        list [1, 2, 3]
+        tuple (1, 2, 3)
+        dict {a:1}
+        string "hello"
+        file object
+        range object
+        many others
+
+    Iterable has __iter__()
+
+    It produces an iterator.
+
+Iterator:
+    The machinery that keeps track of the iteration state
+
+    An iterator has:
+        __next__()
+        raises StopIteration when done
+
+
+Python turns 
+    for x in something:
+
+into
+    it = iter(something)
+    while True:
+        try:
+            x = next(it)
+        except StopIteration:
+            break
+
+With C style thinking
+    iter() gives you a special pointer/iterator object
+    next() dereferences the next value
+    but the iterator moves forward, like incrementing a pointer with state
+    once it's out of data, it throws a StopIteration exception
+
+This is why it feels like pointer arithmetic
+
+How different objects iterate:
+    list iterator:
+        stores a reference + index -> gets element by index
+    dict iterator:
+        iterates over keys, unless you specify .items() or .values()
+    file object iterator
+        returns one line per iteration
+    range iterator:
+        does not store the whole list - counts upward lazily
+    generator:
+        creates values on demand using yield
+
+Different containers, same protocol
+
+
+
+Why python does it this way
+
+Saves massive memory
+    Range(1_000_000_000) uses the memory of about THREE integers
+    in C, you'd need to malloc gigabytes for an array
+
+It decouples the container from traversal
+    you can iterate:
+        sorted
+        reversed
+        filtered
+        transformed
+        zipped
+        enumerated
+    all without modifying the data
+
+It supports infinite sequences
+    def count_up():
+        i = 0
+        while True:
+            yield i
+            i += 1
+
+Impossible with arrays
+
+It enables streaming data
+    you can iterate over:
+        logs
+        network packets
+        database rows
+        stdin
+        EMR Datastreams
+all without loading them into memory
+'''
+
+filled_dict = {"one": 1, "two": 2, "three": 3}
+our_iterable = filled_dict.keys()
+print(our_iterable)     # Prints dict_keys(['one', 'two', 'three']) . This is an object that implements over our iterable interface.
+
+# We can loop it
+for i in our_iterable:
+    print(i)    # Prints one, two, three
+
+# However we cannot address the values by index
+our_iterable[1]     # Raises a TypeError
+
+# our_iterator is an object that can remember the state as whe traverse through it. We get the next object with next()
+next(our_iterable)  # "one"
+next(our_iterable)  # "two"
+next(our_iterable)  # "three"
+
+# At the end, it will raise a StopIteration exception
+next(our_iterable)  # Raises StopIteration
+
+# We can also loop over it, for does this easily
+our_iterator = iter(our_iterable)
+for i in our_iterator:
+    print(i)  # Prints one, two, three
+
+# You can grab all the elements of an iterable or iterator by call of list()
+list(our_iterable)  # Returns ["one", "two", "three"]
+list(our_iterator)  # Returns [] because the state is saved
